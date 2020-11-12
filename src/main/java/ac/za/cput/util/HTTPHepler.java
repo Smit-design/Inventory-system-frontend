@@ -28,6 +28,8 @@ public class HTTPHepler {
     public static HttpResponse<String> sendGet(String url) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET().uri(URI.create(url))
+                .setHeader(HttpHeaders.AUTHORIZATION, basicAuth(CLERK_USERNAME, CLERK_PASSWORD))
+                .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
                 .build();
 
         HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
