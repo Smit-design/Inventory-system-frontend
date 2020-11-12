@@ -22,7 +22,7 @@ public class RegisterClerk extends JFrame {
     private JLabel alreadyHaveAccountTxt, alreadyHaveAccountTxt1, backLblBtn, /*universityLogo,*/
                      universityOrCampusTxt, universityOrCampusTxt1, universityOrCampusTxt2,
                      universityOrCampusTxt3, universityOrCampusTxt4;
-    private JTextField emailTxtF, jTextField1, phoneNumTxtF, surnameTxtF;
+    public JTextField emailTxtF, jTextField1, phoneNumTxtF, surnameTxtF;
     private JLabel jLabel1, jLabel10, jLabel11, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6,
                     jLabel7, jLabel8, jLabel9, newControlClerkTxt;
     private JPanel jPanel1, jPanel2;
@@ -358,19 +358,6 @@ public class RegisterClerk extends JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public int createClerk(ControlClerk controlClerk) throws IOException, InterruptedException {
-        String createClerkURL = baseURL + "create";
-        ObjectMapper mapper = new ObjectMapper();
-
-        String jsonString = mapper.writeValueAsString(controlClerk);
-        System.out.println("Mapper: " + jsonString);
-        HttpResponse<String> response = HTTPHepler.sendPost(createClerkURL, jsonString);
-        String responseBody = response.body();
-        buildClerk  = new Gson().fromJson(responseBody, ControlClerkBuilder.class);
-        System.out.println("status code: " + response.statusCode());
-        return response.statusCode();
-    }
-
     private void regBtnActionPerformed(ActionEvent evt) throws IOException, InterruptedException {
         CompleteClerkProfile clerkProfile = new CompleteClerkProfile();
         ControlClerk controlClerk;
@@ -391,40 +378,15 @@ public class RegisterClerk extends JFrame {
             JOptionPane.showMessageDialog(null, "Phone number or email doesn't exist");
 
         }else{
-            buildClerk = new ControlClerkBuilder.Builder().setEmailAddress(email)
-                    .setFirstName(name)
-                    .setSurname(surname)
-                    .setPhoneNum(phoneNo)
-                    .setPassword("1234")
-                    .build();
-
-            controlClerk = new ControlClerk(buildClerk.getSurname(), buildClerk.getFirstName(),
-                    buildClerk.getPhoneNum(), buildClerk.getEmailAddress(),
-                    buildClerk.getPassword());
-
-            System.out.println("From Builder: " + controlClerk.toString());
-
-            int result = createClerk(controlClerk);
-            if(result == 401){
-                JOptionPane.showMessageDialog(null, "Unauthorized User");
-
-            }else if (result != 200) {
-                JOptionPane.showMessageDialog(null, "Error");
-
-            }else {
-                JOptionPane.showMessageDialog(null, "Success");
-                clerkProfile.setVisible(true);
-                clerkProfile.clerkId = buildClerk.getClerkId();
-                clerkProfile.universityId = buildClerk.getUniversityId();
-                clerkProfile.email = buildClerk.getEmailAddress();
-                clerkProfile.name = buildClerk.getFirstName();
-                clerkProfile.surname = buildClerk.getSurname();
-                clerkProfile.phoneNum = buildClerk.getPhoneNum();
-                clerkProfile.universityLogo.setIcon(this.universityLogo.getIcon());
-                clerkProfile.pack();
-                clerkProfile.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                this.dispose();
-            }
+            clerkProfile.setVisible(true);
+            clerkProfile.email = email;
+            clerkProfile.name = name;
+            clerkProfile.surname = surname;
+            clerkProfile.phoneNum = phoneNo;
+            clerkProfile.universityLogo.setIcon(this.universityLogo.getIcon());
+            clerkProfile.pack();
+            clerkProfile.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.dispose();
         }
     }
 

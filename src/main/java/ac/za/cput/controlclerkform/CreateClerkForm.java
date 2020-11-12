@@ -1,5 +1,6 @@
 package ac.za.cput.controlclerkform;
 
+import ac.za.cput.loginform.LoginPage;
 import org.springframework.web.client.RestTemplate;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +27,6 @@ public class CreateClerkForm extends JFrame {
 
     public CreateClerkForm() {
         initComponents();
-
     }
 
     private void initComponents() {
@@ -161,6 +161,11 @@ public class CreateClerkForm extends JFrame {
         jLabel1.setForeground(new Color(0, 2, 251));
         jLabel1.setText("Sign In");
         jLabel1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jLabel1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
 
         newControlClerkTxt.setFont(new Font("SansSerif", 1, 30)); // NOI18N
         newControlClerkTxt.setText("Create New Clerk");
@@ -300,6 +305,14 @@ public class CreateClerkForm extends JFrame {
     private void saveBtnMouseEntered(MouseEvent evt) {
         //set jButton background
         saveBtn.setBackground(new Color(0, 101, 183));
+    }
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {
+        LoginPage loginPage = new LoginPage();
+        loginPage.setVisible(true);
+        loginPage.pack();
+        loginPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.dispose();
     }
 
     /**

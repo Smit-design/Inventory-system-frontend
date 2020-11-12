@@ -5,6 +5,7 @@
  */
 package ac.za.cput.controlclerkform;
 
+import ac.za.cput.entity.user.ControlClerk;
 import ac.za.cput.entity.user.ControlClerkBuilder;
 import ac.za.cput.util.HTTPHepler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +37,7 @@ public class CompleteClerkProfile extends JFrame {
     private JButton completeProfBtn;
     private String baseURL = "http://localhost:8080/inventory/controlclerk/";
     ControlClerkBuilder builder;
-    public String email, name, surname, phoneNum, clerkId, universityId;
+    public String email, name, surname, phoneNum;
     // End of variables declaration
 
     public CompleteClerkProfile() {
@@ -349,11 +350,11 @@ public class CompleteClerkProfile extends JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public int updateClerk(ControlClerkBuilder builder) throws IOException, InterruptedException {
-        String updateClerkURL = baseURL + "update";
+    public int updateClerk(ControlClerk controlClerk) throws IOException, InterruptedException {
+        String updateClerkURL = baseURL + "create";
         ObjectMapper mapper = new ObjectMapper();
 
-        String jsonString = mapper.writeValueAsString(builder);
+        String jsonString = mapper.writeValueAsString(controlClerk);
         System.out.println("Mapper: " + jsonString);
         HttpResponse<String> response = HTTPHepler.sendPost(updateClerkURL, jsonString);
         System.out.println("status code: " + response.statusCode());
@@ -370,11 +371,10 @@ public class CompleteClerkProfile extends JFrame {
              JOptionPane.showMessageDialog(null, "Passwords don't match");
 
          }else{
-             builder = new ControlClerkBuilder.Builder().setPassword(password).setEmailAddress(email)
-                     .setFirstName(name).setPhoneNum(phoneNum).setSurname(surname)
-                     .setClerkId(clerkId).setUniversityId(universityId).build();
 
-             int result = updateClerk(builder);
+             ControlClerk controlClerk = new ControlClerk(surname, name, phoneNum, email, password);
+
+             int result = updateClerk(controlClerk/*builder*/);
              if(result == 401){
                  JOptionPane.showMessageDialog(null, "Unauthorized User");
 
@@ -395,6 +395,10 @@ public class CompleteClerkProfile extends JFrame {
     private void backLblBtnMouseClicked(MouseEvent evt) {
         RegisterClerk regClerk = new RegisterClerk();
         regClerk.setVisible(true);
+        regClerk.jTextField1.setText(this.name);
+        regClerk.surnameTxtF.setText(this.surname);
+        regClerk.emailTxtF.setText(this.email);
+        regClerk.phoneNumTxtF.setText(this.phoneNum);
         regClerk.universityLogo.setIcon(this.universityLogo.getIcon());
         regClerk.pack();
         regClerk.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -438,9 +442,6 @@ public class CompleteClerkProfile extends JFrame {
         } catch (UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(CompleteClerkProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
