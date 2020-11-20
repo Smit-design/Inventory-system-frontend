@@ -162,7 +162,13 @@ public class LoginPage extends JFrame {
         });
         loginBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                loginBtnActionPerformed(evt);
+                try {
+                    loginBtnActionPerformed(evt);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -270,7 +276,7 @@ public class LoginPage extends JFrame {
         // TODO add your handling code here:
     }
 
-    private void loginBtnActionPerformed(ActionEvent evt) {
+    private void loginBtnActionPerformed(ActionEvent evt) throws IOException, InterruptedException {
         CreateClerkForm clerkForm = new CreateClerkForm();
         String userCombo = "Please Select...";
 
