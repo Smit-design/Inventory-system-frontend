@@ -297,7 +297,6 @@ public class CreateClerkForm extends JFrame {
             }else if(jComboBox1.getSelectedItem().equals(universities[x].getName())){
                 RegisterClerk regClerk = new RegisterClerk();
                 regClerk.setVisible(true);
-                regClerk.universityId = universities[x].getUniversityId();
                 regClerk.university = universities[x];
                 regClerk.pack();
                 regClerk.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

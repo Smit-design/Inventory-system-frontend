@@ -30,7 +30,7 @@ public class CompleteClerkProfile extends JFrame {
     private JPasswordField confPasswTxtF, passwordTxtF;
     private JButton completeProfBtn;
     private String baseURL = "http://localhost:8080/inventory/controlclerk/";
-    public String email, name, surname, phoneNum, universityId;
+    public String email, name, surname, phoneNum;
     University university;
     // End of variables declaration
 
@@ -374,7 +374,6 @@ public class CompleteClerkProfile extends JFrame {
 
         }else{
              ControlClerk controlClerk = new ControlClerk(university, surname, name, phoneNum, email, address, province, password);
-            System.out.println("Print Control Clerk " + controlClerk);
 
              int result = createClerk(controlClerk);
              if(result == 401){
@@ -401,7 +400,7 @@ public class CompleteClerkProfile extends JFrame {
         regClerk.surnameTxtF.setText(this.surname);
         regClerk.emailTxtF.setText(this.email);
         regClerk.phoneNumTxtF.setText(this.phoneNum);
-        regClerk.universityId = this.universityId;
+        regClerk.university = this.university;
         regClerk.universityLogo.setIcon(this.universityLogo.getIcon());
         regClerk.pack();
         regClerk.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

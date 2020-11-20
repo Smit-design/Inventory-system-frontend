@@ -24,7 +24,6 @@ public class RegisterClerk extends JFrame {
     private JPanel jPanel1, jPanel2;
     private JButton regBtn;
     public JLabel universityLogo;
-    public String universityId;
     University university;
     // End of variables declaration
 
@@ -361,7 +360,6 @@ public class RegisterClerk extends JFrame {
 
     private void regBtnActionPerformed(ActionEvent evt) throws IOException, InterruptedException {
         CompleteClerkProfile clerkProfile = new CompleteClerkProfile();
-        ControlClerk controlClerk;
 
         String name = jTextField1.getText().trim();
         String surname = surnameTxtF.getText().trim();
@@ -384,7 +382,6 @@ public class RegisterClerk extends JFrame {
             clerkProfile.name = name;
             clerkProfile.surname = surname;
             clerkProfile.phoneNum = phoneNo;
-            clerkProfile.universityId = universityId;
             clerkProfile.university = this.university;
             clerkProfile.universityLogo.setIcon(this.universityLogo.getIcon());
             clerkProfile.pack();
