@@ -1,14 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ac.za.cput.controlclerkform;
 
-import ac.za.cput.entity.user.ControlClerkBuilder;
+import ac.za.cput.entity.generic.University;
+import ac.za.cput.entity.user.ControlClerk;
 import ac.za.cput.util.HTTPHepler;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.http.HttpResponse;
-
 import javax.swing.*;
 
 /**
@@ -25,8 +19,9 @@ import javax.swing.*;
  */
 public class CompleteClerkProfile extends JFrame {
     // Variables declaration - do not modify
-    private JLabel alreadyHaveAccountTxt, alreadyHaveAccountTxt1, backLblBtn, jLabel10, jLabel11, jLabel2, jLabel3,
-            jLabel4, jLabel5, jLabel6, jLabel8, jLabel9, newControlClerkTxt,
+    private JLabel alreadyHaveAccountTxt, alreadyHaveAccountTxt1, backLblBtn,
+            jLabel10, jLabel11, jLabel2, jLabel3,jLabel4, jLabel5, jLabel6,
+            jLabel8, jLabel9, newControlClerkTxt,
             universityOrCampusTxt, universityOrCampusTxt1, universityOrCampusTxt2,
             universityOrCampusTxt3, universityOrCampusTxt4, jLabel7;
     public JLabel universityLogo;
@@ -35,8 +30,8 @@ public class CompleteClerkProfile extends JFrame {
     private JPasswordField confPasswTxtF, passwordTxtF;
     private JButton completeProfBtn;
     private String baseURL = "http://localhost:8080/inventory/controlclerk/";
-    ControlClerkBuilder builder;
-    public String email, name, surname, phoneNum, clerkId, universityId;
+    public String email, name, surname, phoneNum, universityId;
+    University university;
     // End of variables declaration
 
     public CompleteClerkProfile() {
@@ -81,36 +76,36 @@ public class CompleteClerkProfile extends JFrame {
 
         jPanel2.setBackground(new Color(0, 101, 204));
 
-        universityLogo.setIcon(new ImageIcon("/images/CPUT final.png")); // NOI18N
+        universityLogo.setIcon(new ImageIcon("/images/CPUT final.png"));
         universityLogo.setHorizontalTextPosition(SwingConstants.CENTER);
 
-        jLabel4.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        jLabel4.setFont(new Font("SansSerif", 0, 14));
         jLabel4.setForeground(new Color(255, 255, 255));
         jLabel4.setText("The goal is not to improve one measurement in ");
 
-        jLabel5.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        jLabel5.setFont(new Font("SansSerif", 0, 14));
         jLabel5.setForeground(new Color(255, 255, 255));
         jLabel5.setText("isolation. The goal is to reduce operational");
 
-        jLabel6.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        jLabel6.setFont(new Font("SansSerif", 0, 14));
         jLabel6.setForeground(new Color(255, 255, 255));
         jLabel6.setText("expenses & reduce inventories and increase ");
 
-        jLabel7.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        jLabel7.setFont(new Font("SansSerif", 0, 14));
         jLabel7.setForeground(new Color(255, 255, 255));
         jLabel7.setText("throughput simultaneously.");
 
-        jLabel8.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        jLabel8.setFont(new Font("SansSerif", 0, 14));
         jLabel8.setForeground(new Color(255, 255, 255));
         jLabel8.setText("Eliyahu M. Goldratt");
 
-        jLabel9.setIcon(new ImageIcon("/images/approval_96px.png")); // NOI18N
+        jLabel9.setIcon(new ImageIcon("approval_96px.png"));
 
-        jLabel10.setIcon(new ImageIcon("/images/quote_left_96px.png")); // NOI18N
+        jLabel10.setIcon(new ImageIcon("quote_left_96px.png"));
 
-        jLabel11.setIcon(new ImageIcon("/images/quote.png")); // NOI18N
+        jLabel11.setIcon(new ImageIcon("quote.png"));
 
-        jLabel3.setFont(new Font("SansSerif", 1, 28)); // NOI18N
+        jLabel3.setFont(new Font("SansSerif", 1, 28));
         jLabel3.setForeground(new Color(0, 204, 204));
         jLabel3.setText("Inventory Management System");
 
@@ -177,23 +172,23 @@ public class CompleteClerkProfile extends JFrame {
                 .addGap(164, 164, 164))
         );
 
-        alreadyHaveAccountTxt.setFont(new Font("SansSerif", 0, 12)); // NOI18N
+        alreadyHaveAccountTxt.setFont(new Font("SansSerif", 0, 12));
         alreadyHaveAccountTxt.setForeground(new Color(204, 204, 204));
         alreadyHaveAccountTxt.setText("STEP 03/03");
 
-        newControlClerkTxt.setFont(new Font("SansSerif", 1, 30)); // NOI18N
+        newControlClerkTxt.setFont(new Font("SansSerif", 1, 30));
         newControlClerkTxt.setText("Complete Profile!");
 
         jLabel2.setFont(new Font("SansSerif", 0, 14)); // NOI18N
         jLabel2.setForeground(new Color(153, 153, 153));
-        jLabel2.setText("For the purpose of industry revolution, your details are required");
+        jLabel2.setText("For the purpose of industry revolution, your details                       ");
 
-        universityOrCampusTxt.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        universityOrCampusTxt.setFont(new Font("SansSerif", 0, 14));
         universityOrCampusTxt.setForeground(new Color(153, 153, 153));
         universityOrCampusTxt.setText("Create password*");
 
         completeProfBtn.setBackground(new Color(14, 68, 240));
-        completeProfBtn.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        completeProfBtn.setFont(new Font("SansSerif", 0, 14));
         completeProfBtn.setForeground(new Color(255, 255, 255));
         completeProfBtn.setText("Register Account");
         completeProfBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -214,19 +209,19 @@ public class CompleteClerkProfile extends JFrame {
             }
         });
 
-        universityOrCampusTxt1.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        universityOrCampusTxt1.setFont(new Font("SansSerif", 0, 14));
         universityOrCampusTxt1.setForeground(new Color(153, 153, 153));
         universityOrCampusTxt1.setText("are required.");
 
-        universityOrCampusTxt2.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        universityOrCampusTxt2.setFont(new Font("SansSerif", 0, 14));
         universityOrCampusTxt2.setForeground(new Color(153, 153, 153));
         universityOrCampusTxt2.setText("Confirm password*");
 
-        universityOrCampusTxt3.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        universityOrCampusTxt3.setFont(new Font("SansSerif", 0, 14));
         universityOrCampusTxt3.setForeground(new Color(153, 153, 153));
-        universityOrCampusTxt3.setText("Your Address");
+        universityOrCampusTxt3.setText("Your Address*");
 
-        backLblBtn.setFont(new Font("SansSerif", 1, 12)); // NOI18N
+        backLblBtn.setFont(new Font("SansSerif", 1, 12));
         backLblBtn.setForeground(new Color(153, 153, 153));
         backLblBtn.setText("<   Back");
         backLblBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -242,21 +237,21 @@ public class CompleteClerkProfile extends JFrame {
             }
         });
 
-        alreadyHaveAccountTxt1.setFont(new Font("SansSerif", 0, 12)); // NOI18N
+        alreadyHaveAccountTxt1.setFont(new Font("SansSerif", 0, 12));
         alreadyHaveAccountTxt1.setForeground(new Color(102, 102, 102));
         alreadyHaveAccountTxt1.setText("Residency Info.");
 
-        universityOrCampusTxt4.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        universityOrCampusTxt4.setFont(new Font("SansSerif", 0, 14));
         universityOrCampusTxt4.setForeground(new Color(153, 153, 153));
-        universityOrCampusTxt4.setText("Country of residence");
+        universityOrCampusTxt4.setText("Province of Residence*");
 
-        passwordTxtF.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        passwordTxtF.setFont(new Font("SansSerif", 0, 14));
 
-        confPasswTxtF.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        confPasswTxtF.setFont(new Font("SansSerif", 0, 14));
 
-        addressTxtF.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        addressTxtF.setFont(new Font("SansSerif", 0, 14));
 
-        countryTxtF.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        countryTxtF.setFont(new Font("SansSerif", 0, 14));
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -349,13 +344,12 @@ public class CompleteClerkProfile extends JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public int updateClerk(ControlClerkBuilder builder) throws IOException, InterruptedException {
-        String updateClerkURL = baseURL + "update";
+    public int createClerk(ControlClerk controlClerk) throws IOException, InterruptedException {
+        String createClerkURL = baseURL + "create";
         ObjectMapper mapper = new ObjectMapper();
 
-        String jsonString = mapper.writeValueAsString(builder);
-        System.out.println("Mapper: " + jsonString);
-        HttpResponse<String> response = HTTPHepler.sendPost(updateClerkURL, jsonString);
+        String jsonString = mapper.writeValueAsString(controlClerk);
+        HttpResponse<String> response = HTTPHepler.sendPost(createClerkURL, jsonString);
         System.out.println("status code: " + response.statusCode());
         return response.statusCode();
     }
@@ -364,17 +358,25 @@ public class CompleteClerkProfile extends JFrame {
          String password = String.valueOf(passwordTxtF.getPassword()).trim();
          String confirmPassword = String.valueOf(confPasswTxtF.getPassword()).trim();
          String address = addressTxtF.getText().trim();
-         String country = countryTxtF.getText().trim();
+         String province = countryTxtF.getText().trim();
 
-         if(!(password.equals(confirmPassword))){
+        if(password.equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter your Password");
+
+        }else if(!(password.equals(confirmPassword))){
              JOptionPane.showMessageDialog(null, "Passwords don't match");
 
-         }else{
-             builder = new ControlClerkBuilder.Builder().setPassword(password).setEmailAddress(email)
-                     .setFirstName(name).setPhoneNum(phoneNum).setSurname(surname)
-                     .setClerkId(clerkId).setUniversityId(universityId).build();
+         }else if(address.equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter your current address");
 
-             int result = updateClerk(builder);
+        }else if(province.equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter your province of residence");
+
+        }else{
+             ControlClerk controlClerk = new ControlClerk(university, surname, name, phoneNum, email, address, province, password);
+            System.out.println("Print Control Clerk " + controlClerk);
+
+             int result = createClerk(controlClerk);
              if(result == 401){
                  JOptionPane.showMessageDialog(null, "Unauthorized User");
 
@@ -395,6 +397,11 @@ public class CompleteClerkProfile extends JFrame {
     private void backLblBtnMouseClicked(MouseEvent evt) {
         RegisterClerk regClerk = new RegisterClerk();
         regClerk.setVisible(true);
+        regClerk.jTextField1.setText(this.name);
+        regClerk.surnameTxtF.setText(this.surname);
+        regClerk.emailTxtF.setText(this.email);
+        regClerk.phoneNumTxtF.setText(this.phoneNum);
+        regClerk.universityId = this.universityId;
         regClerk.universityLogo.setIcon(this.universityLogo.getIcon());
         regClerk.pack();
         regClerk.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -439,9 +446,6 @@ public class CompleteClerkProfile extends JFrame {
             java.util.logging.Logger.getLogger(CompleteClerkProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         EventQueue.invokeLater(new Runnable() {
@@ -450,5 +454,4 @@ public class CompleteClerkProfile extends JFrame {
             }
         });
     }
-
 }

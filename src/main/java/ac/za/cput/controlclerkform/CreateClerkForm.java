@@ -1,11 +1,16 @@
 package ac.za.cput.controlclerkform;
 
-import org.springframework.web.client.RestTemplate;
+import ac.za.cput.entity.generic.University;
+import ac.za.cput.loginform.LoginPage;
+import ac.za.cput.util.HTTPHepler;
+import com.google.gson.Gson;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.http.HttpResponse;
 import javax.swing.*;
 
 /**
@@ -20,13 +25,15 @@ public class CreateClerkForm extends JFrame {
     private JPanel jPanel1, jPanel2;
     public JLabel universityLogo;
     private JButton saveBtn;
-    private final String CONTROLCLERK_SERVICE = "http://localhost:8080/inventory/controlclerk/";
+    private String baseURL = "http://localhost:8080/university/";
     private String universitySelected;
+    University[] universities;
     // End of variables declaration
 
-    public CreateClerkForm() {
+    public CreateClerkForm() throws IOException, InterruptedException {
         initComponents();
-
+        getAllUniversity();
+        loadUniversityComboBox();
     }
 
     private void initComponents() {
@@ -57,7 +64,7 @@ public class CreateClerkForm extends JFrame {
 
         jPanel2.setBackground(new Color(0, 101, 204));
 
-        universityLogo.setIcon(new ImageIcon("CPUT final.png")); // NOI18N
+        universityLogo.setIcon(new ImageIcon("Inventory Default Logo.png")); // NOI18N
         universityLogo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel4.setFont(new Font("SansSerif", 0, 14)); // NOI18N
@@ -72,21 +79,21 @@ public class CreateClerkForm extends JFrame {
         jLabel6.setForeground(new Color(255, 255, 255));
         jLabel6.setText("expenses & reduce inventories and increase ");
 
-        jLabel7.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        jLabel7.setFont(new Font("SansSerif", 0, 14));
         jLabel7.setForeground(new Color(255, 255, 255));
         jLabel7.setText("throughput simultaneously.");
 
-        jLabel8.setFont(new Font("SansSerif", 0, 14)); // NOI18N
+        jLabel8.setFont(new Font("SansSerif", 0, 14));
         jLabel8.setForeground(new Color(255, 255, 255));
         jLabel8.setText("Eliyahu M. Goldratt");
 
-        jLabel9.setIcon(new ImageIcon("/images/approval_96px.png")); // NOI18N
+        jLabel9.setIcon(new ImageIcon("approval_96px.png"));
 
-        jLabel10.setIcon(new ImageIcon("quote_left_96px.png")); // NOI18N
+        jLabel10.setIcon(new ImageIcon("quote_left_96px.png"));
 
-        jLabel11.setIcon(new ImageIcon("/images/quote.png")); // NOI18N
+        jLabel11.setIcon(new ImageIcon("quote.png"));
 
-        jLabel3.setFont(new Font("SansSerif", 1, 28)); // NOI18N
+        jLabel3.setFont(new Font("SansSerif", 1, 28));
         jLabel3.setForeground(new Color(0, 204, 204));
         jLabel3.setText("Inventory Management System");
 
@@ -161,6 +168,11 @@ public class CreateClerkForm extends JFrame {
         jLabel1.setForeground(new Color(0, 2, 251));
         jLabel1.setText("Sign In");
         jLabel1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jLabel1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
 
         newControlClerkTxt.setFont(new Font("SansSerif", 1, 30)); // NOI18N
         newControlClerkTxt.setText("Create New Clerk");
@@ -175,7 +187,7 @@ public class CreateClerkForm extends JFrame {
 
         jComboBox1.setFont(new Font("SansSerif", 0, 14)); // NOI18N
         jComboBox1.setForeground(new Color(153, 153, 153));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please Select...", "Cape Peninsula University of Technology", "University of Western Cape", "University of Cape Town", "University of South Africa" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please Select..."}));
         jComboBox1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jComboBox1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -262,44 +274,76 @@ public class CreateClerkForm extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    public void loadUniversityComboBox(){
+        for(int x = 0; x < universities.length; x++){
+            jComboBox1.addItem(universities[x].getName());
+        }
+    }
+
+    public int getAllUniversity() throws IOException, InterruptedException {
+        String url = baseURL + "all";
+        HttpResponse<String> response = HTTPHepler.sendGet(url);
+        String responseBody = response.body();
+        universities = new Gson().fromJson(responseBody, University[].class);
+        return response.statusCode();
+    }
+
     private void saveBtnActionPerformed(ActionEvent evt) {
-         String university = "Please Select...";
-         String url = CONTROLCLERK_SERVICE + "create";
+        for(int x = 0; x < universities.length; x++){
+            if (jComboBox1.getSelectedItem().equals("Please Select...")) {
+                JOptionPane.showMessageDialog(null, "Please Select University");
+                break;
 
-        if (jComboBox1.getSelectedItem().equals("Please Select...")) {
-            JOptionPane.showMessageDialog(null, "Please Select University");
-
-        } else if (!(jComboBox1.getSelectedIndex() == 0)) {
-            university = String.valueOf(jComboBox1.getSelectedItem());
-
-            RegisterClerk regClerk = new RegisterClerk();
-            regClerk.setVisible(true);
-            regClerk.pack();
-            regClerk.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            regClerk.universityLogo.setIcon(this.universityLogo.getIcon());
-            this.dispose();
+            }else if(jComboBox1.getSelectedItem().equals(universities[x].getName())){
+                RegisterClerk regClerk = new RegisterClerk();
+                regClerk.setVisible(true);
+                regClerk.universityId = universities[x].getUniversityId();
+                regClerk.university = universities[x];
+                regClerk.pack();
+                regClerk.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                regClerk.universityLogo.setIcon(this.universityLogo.getIcon());
+                this.dispose();
+            }
         }
     }
 
     private void jComboBox1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
          universitySelected = jComboBox1.getSelectedItem().toString();
-        if (universitySelected.equals("Cape Peninsula University of Technology")) {
+
+         if(universitySelected.equals("Please Select...")) {
+             universityLogo.setIcon(new ImageIcon("Inventory Default Logo.png"));
+
+         }else if (universitySelected.equalsIgnoreCase("Cape Peninsula University of Technology")
+                    || universitySelected.equalsIgnoreCase("CPUT")) {
             universityLogo.setIcon(new ImageIcon("CPUT final.png"));
 
-        } else if (universitySelected.equals("University of Western Cape")) {
+        } else if (universitySelected.equalsIgnoreCase("University of Western Cape")
+                    || universitySelected.equalsIgnoreCase("University of the Western Cape")
+                        ||universitySelected.equalsIgnoreCase("UWC")) {
             universityLogo.setIcon(new ImageIcon("UWC Logo.png"));
 
-        } else if (universitySelected.equals("University of Cape Town")) {
+        } else if (universitySelected.equalsIgnoreCase("University of Cape Town")
+                    || universitySelected.equalsIgnoreCase("UCT")) {
             universityLogo.setIcon(new ImageIcon("UCT Logo.png"));
 
-        } else if (universitySelected.equals("University of South Africa")) {
+        } else if (universitySelected.equalsIgnoreCase("University of South Africa")
+                    || universitySelected.equalsIgnoreCase("UNISA")) {
             universityLogo.setIcon(new ImageIcon("Unisa Logo.png"));
+
         }
     }
 
     private void saveBtnMouseEntered(MouseEvent evt) {
         //set jButton background
         saveBtn.setBackground(new Color(0, 101, 183));
+    }
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {
+        LoginPage loginPage = new LoginPage();
+        loginPage.setVisible(true);
+        loginPage.pack();
+        loginPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.dispose();
     }
 
     /**
@@ -332,7 +376,13 @@ public class CreateClerkForm extends JFrame {
         /* Create and display the form */
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CreateClerkForm().setVisible(true);
+                try {
+                    new CreateClerkForm().setVisible(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

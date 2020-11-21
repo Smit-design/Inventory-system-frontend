@@ -1,17 +1,24 @@
 package ac.za.cput.entity.user;
 
+import ac.za.cput.entity.generic.University;
+
 public class ControlClerk{
 
-    private String surname, firstName, phoneNum, emailAddress, password;
+    private String surname, firstName, phoneNum, emailAddress, address, province, password;
+    University university;
 
     private ControlClerk(){}
 
-    public ControlClerk(String surname, String firstName, String phoneNum, String emailAddress, String password) {
+    public ControlClerk(University university, String surname, String firstName, String phoneNum, String emailAddress,
+                                                   String address, String province, String password) {
         this.surname = surname;
         this.firstName = firstName;
         this.phoneNum = phoneNum;
         this.emailAddress = emailAddress;
         this.password = password;
+        this.address = address;
+        this.province = province;
+        this.university = university;
     }
 
     public String getSurname() {
@@ -52,6 +59,30 @@ public class ControlClerk{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public University getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(University university) {
+        this.university = university;
     }
 
     @Override
