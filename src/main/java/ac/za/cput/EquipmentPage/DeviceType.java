@@ -6,7 +6,7 @@ package ac.za.cput.EquipmentPage;/*
 
 /**
  *
- * @author Dinana
+ * @author Emile Lubangi
  */
 public class DeviceType extends javax.swing.JFrame {
 
