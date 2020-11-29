@@ -11,6 +11,11 @@ public class University{
 
     private University(){}
 
+    public University(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
+
     public University(String universityId, String name, String address) {
         this.universityId = universityId;
         this.name = name;

@@ -5,6 +5,7 @@ import ac.za.cput.loginform.LoginPage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class InventorySystem {
 
@@ -27,7 +28,13 @@ public class InventorySystem {
         }
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LoginPage().setVisible(true);
+                try {
+                    new LoginPage().setVisible(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
