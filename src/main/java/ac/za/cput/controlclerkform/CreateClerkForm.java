@@ -1,8 +1,10 @@
 package ac.za.cput.controlclerkform;
 
 import ac.za.cput.entity.generic.University;
+import ac.za.cput.entity.user.ControlClerk;
 import ac.za.cput.loginform.LoginPage;
 import ac.za.cput.util.HTTPHepler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -170,7 +172,13 @@ public class CreateClerkForm extends JFrame {
         jLabel1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jLabel1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                try {
+                    jLabel1MouseClicked(evt);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -274,9 +282,24 @@ public class CreateClerkForm extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void loadUniversityComboBox(){
-        for(int x = 0; x < universities.length; x++){
-            jComboBox1.addItem(universities[x].getName());
+    public void loadUniversityComboBox() throws IOException, InterruptedException {
+        if(universities.length == 0){
+            University university = new University("Cape Peninsula University of Technology",
+                                                    "Hanover Street, Zonnebloem, Cape Town, 7925");
+            int result = defaultUniversity(university);
+            if(result == 401){
+                JOptionPane.showMessageDialog(null, "Unauthorized User");
+
+            }else if (result != 200) {
+                JOptionPane.showMessageDialog(null, "Error");
+            }else {
+                getAllUniversity();
+                jComboBox1.addItem(universities[0].getName());
+            }
+        }else {
+            for(int x = 0; x < universities.length; x++){
+                jComboBox1.addItem(universities[x].getName());
+            }
         }
     }
 
@@ -285,6 +308,16 @@ public class CreateClerkForm extends JFrame {
         HttpResponse<String> response = HTTPHepler.sendGet(url);
         String responseBody = response.body();
         universities = new Gson().fromJson(responseBody, University[].class);
+        return response.statusCode();
+    }
+
+    public int defaultUniversity(University university) throws IOException, InterruptedException {
+        String url = baseURL + "create";
+        ObjectMapper mapper = new ObjectMapper();
+
+        String jsonString = mapper.writeValueAsString(university);
+        HttpResponse<String> response = HTTPHepler.sendPost(url, jsonString);
+        System.out.println("status code: " + response.statusCode());
         return response.statusCode();
     }
 
@@ -337,7 +370,7 @@ public class CreateClerkForm extends JFrame {
         saveBtn.setBackground(new Color(0, 101, 183));
     }
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) throws IOException, InterruptedException {
         LoginPage loginPage = new LoginPage();
         loginPage.setVisible(true);
         loginPage.pack();

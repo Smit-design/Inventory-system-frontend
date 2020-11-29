@@ -360,7 +360,10 @@ public class CompleteClerkProfile extends JFrame {
          String address = addressTxtF.getText().trim();
          String province = countryTxtF.getText().trim();
 
-        if(password.equals("")){
+        if(university == null){
+            JOptionPane.showMessageDialog(null, "Please select the University");
+
+        }else if(password.equals("")){
             JOptionPane.showMessageDialog(null, "Please enter your Password");
 
         }else if(!(password.equals(confirmPassword))){
